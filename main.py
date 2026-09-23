@@ -7,11 +7,18 @@ if not os.path.exists(input_folder):
     exit()
 
 output_folder = input("enter output folder: (path directory) ").strip().strip('"')
-if not os.path.exists(output_folder):
+if not os.path.exists(output_folder) or output_folder == "" or output_folder == " ":
     # if dont exist create it under the input folder
-    os.makedirs(output_folder)
+    if os.path.exists(os.path.join(input_folder, "output")):
+        print(f"Output folder already exists: {os.path.join(input_folder, 'output')}")
+        print("Copy the file of the output folder and enter it as the output folder path.")
+        print("Exiting...")
+        exit()
 
+    os.makedirs(os.path.join(input_folder, "output"), exist_ok=True)
+    output_folder = os.path.join(input_folder, "output")
     print(f"Output folder created: {output_folder}")
+
 
 
 for file in os.listdir(input_folder):
@@ -20,4 +27,5 @@ for file in os.listdir(input_folder):
         output_path = os.path.join(output_folder, os.path.splitext(file)[0] + ".png") 
         with Image.open(input_path) as img:
             img.save(output_path, "PNG")
+            print("done converting: ", file, "to", os.path.splitext(file)[0] + ".png")
                     
